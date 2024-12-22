@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
 const LoginScreen = ({ navigation }) => {
   return (
@@ -9,7 +9,7 @@ const LoginScreen = ({ navigation }) => {
       <TextInput style={styles.input} placeholder="Şifre" secureTextEntry />
 
       <TouchableOpacity
-        style={[styles.touchableButton,{backgroundColor:'#2196F3'}]}
+        style={[styles.touchableButton, {backgroundColor:"#2196F3"}]}
         onPress={() => alert('Giriş yapıldı!')}
       >
         <Text style={styles.touchableButtonText}>Giriş Yap</Text>
@@ -22,12 +22,20 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.touchableButtonText}>Geri Dön</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity
+        style={styles.forgotButton}
+        onPress={() => Alert.alert('Şifremi Unuttum', 'Şifrenizi sıfırlamak için destek ekibiyle iletişime geçin.')}
+      >
+        <Text style={styles.forgotButtonText}>Şifremi Unuttum</Text>
+      </TouchableOpacity>
+
       <Text style={styles.infoText}>Üyeliğiniz yok ise:</Text>
-      <Button
-        title="Üye Olun"
+      <TouchableOpacity
+        style={styles.signupButton}
         onPress={() => navigation.navigate('Signup')}
-        color="#841584"
-      />
+      >
+        <Text style={styles.signupButtonText}>Üye Ol</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -57,21 +65,42 @@ const styles = StyleSheet.create({
   },
   touchableButton: {
     backgroundColor: '#841584',
-    padding: 15,
-    marginVertical: 10,
+    padding: 12,
+    marginVertical: 8,
     borderRadius: 5,
     alignItems: 'center',
-    width: '80%',
+    width: '70%',
   },
   touchableButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
   },
+  forgotButton: {
+    marginTop: 10,
+  },
+  forgotButtonText: {
+    color: '#841584',
+    fontSize: 13,
+    textDecorationLine: 'underline',
+  },
   infoText: {
-    marginTop: 20,
-    fontSize: 16,
+    marginTop: 18,
+    fontSize: 14,
     color: '#555',
+  },
+  signupButton: {
+    marginTop: 8,
+    backgroundColor: '#841584',
+    padding: 8,
+    borderRadius: 5,
+    alignItems: 'center',
+    width: '70%',
+  },
+  signupButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
 
