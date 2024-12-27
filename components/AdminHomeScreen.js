@@ -1,20 +1,29 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { auth } from '../config/firebaseConfig';
+import { signOut } from 'firebase/auth';
 
-const AdminHomeScreen = () => {
+const AdminHomeScreen = ({ navigation }) => {
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); // Firebase Web SDK'ya uygun çıkış işlemi
+      Alert.alert('Başarılı', 'Çıkış yapıldı!');
+      navigation.replace('Welcome'); // Çıkış sonrası giriş ekranına yönlendirme
+    } catch (error) {
+      Alert.alert('Hata', error.message);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Hoş Geldin, Doktor!</Text>
-      
       <TouchableOpacity style={[styles.button, styles.addPatientButton]}>
         <Text style={styles.buttonText}>Hasta Ekle</Text>
       </TouchableOpacity>
-
       <TouchableOpacity style={[styles.button, styles.seePatientButton]}>
         <Text style={styles.buttonText}>Hasta Takibi</Text>
       </TouchableOpacity>
-      
-      <TouchableOpacity style={[styles.button, styles.logoutButton]}>
+      <TouchableOpacity style={[styles.button, styles.logoutButton]} onPress={handleLogout}>
         <Text style={styles.buttonText}>Çıkış Yap</Text>
       </TouchableOpacity>
     </View>
@@ -27,13 +36,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f0f4f7', // Arka plan rengini açık gri yaptık
+    backgroundColor: '#f0f4f7',
   },
   welcomeText: {
     fontSize: 26,
     marginBottom: 30,
     fontWeight: 'bold',
-    color: '#333', // Hoş geldiniz mesajı koyu gri
+    color: '#333',
     textAlign: 'center',
   },
   button: {
@@ -42,11 +51,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     marginVertical: 12,
-    shadowColor: '#000', // Butonlar için gölge efekti
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 5, // Android için gölge
   },
   buttonText: {
     color: '#fff',
@@ -54,13 +58,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   addPatientButton: {
-    backgroundColor: '#4CAF50', // Sonuçları Gör butonu yeşil
+    backgroundColor: '#4CAF50',
   },
   seePatientButton: {
-    backgroundColor: '#007BFF', // Profili Yönet butonu mavi
+    backgroundColor: '#007BFF',
   },
   logoutButton: {
-    backgroundColor: '#FF5733', // Çıkış Yap butonu kırmızı
+    backgroundColor: '#FF5733',
   },
 });
 
