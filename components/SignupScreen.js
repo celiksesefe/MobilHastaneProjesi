@@ -3,28 +3,51 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { auth } from '../config/firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { getDatabase, ref, set } from 'firebase/database';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const SignupScreen = ({ navigation }) => {
-  const [fullName, setFullName] = useState(''); // Ad Soyad
-  const [email, setEmail] = useState(''); // E-posta
-  const [password, setPassword] = useState(''); // Şifre
+  const [fullName, setFullName] = useState('');
+  const [tcNo, setTcNo] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); // Şifre tekrar
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false); // Tarih seçici kontrolü
+  const [passwordsMatch, setPasswordsMatch] = useState(true); // Şifre uyumu durumu
 
   const handleSignup = async () => {
+    if (!/^[a-zA-ZçÇğĞıİöÖşŞüÜ\s]+$/.test(fullName)) {
+      Alert.alert('Hata', 'Ad Soyad sadece harflerden oluşmalıdır.');
+      return;
+    }
+    if (!/^\d{11}$/.test(tcNo)) {
+      Alert.alert('Hata', 'T.C. Kimlik Numarası 11 haneli olmalıdır ve sadece rakamlardan oluşmalıdır.');
+      return;
+    }
+    if (!birthDate) {
+      Alert.alert('Hata', 'Doğum Tarihi seçilmelidir.');
+      return;
+    }
+    if (!passwordsMatch) {
+      Alert.alert('Hata', 'Şifreler uyuşmuyor. Lütfen kontrol edin.');
+      return;
+    }
+
     try {
-      // Firebase Authentication ile kullanıcı oluştur
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Kullanıcı bilgilerini Firebase Realtime Database'e kaydet
       const db = getDatabase();
       await set(ref(db, `users/${user.uid}`), {
-        fullName: fullName,
+        fullName,
+        tcNo,
+        birthDate,
         email: user.email,
-        userType: 'user', // Varsayılan olarak "user"
+        userType: 'user',
       });
 
       Alert.alert('Başarılı', 'Üyelik oluşturuldu!');
-      navigation.navigate('Login'); // Kayıttan sonra giriş ekranına yönlendir
+      navigation.navigate('Login');
     } catch (error) {
       let errorMessage = '';
       switch (error.code) {
@@ -44,6 +67,32 @@ const SignupScreen = ({ navigation }) => {
     }
   };
 
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+    setPasswordsMatch(value === confirmPassword);
+  };
+
+  const handleConfirmPasswordChange = (value) => {
+    setConfirmPassword(value);
+    setPasswordsMatch(value === password);
+  };
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}/${date.getFullYear()}`;
+    setBirthDate(formattedDate);
+    hideDatePicker();
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Üye Ol</Text>
@@ -52,6 +101,25 @@ const SignupScreen = ({ navigation }) => {
         placeholder="Ad Soyad"
         value={fullName}
         onChangeText={setFullName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="T.C. Kimlik Numarası"
+        keyboardType="numeric"
+        value={tcNo}
+        onChangeText={setTcNo}
+      />
+      <TouchableOpacity style={styles.datePickerButton} onPress={showDatePicker}>
+        <Text style={styles.datePickerText}>
+          {birthDate ? `Doğum Tarihi: ${birthDate}` : 'Doğum Tarihi Seç'}
+        </Text>
+      </TouchableOpacity>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+        maximumDate={new Date()}
       />
       <TextInput
         style={styles.input}
@@ -65,8 +133,18 @@ const SignupScreen = ({ navigation }) => {
         placeholder="Şifre"
         secureTextEntry
         value={password}
-        onChangeText={setPassword}
+        onChangeText={handlePasswordChange}
       />
+      <TextInput
+        style={styles.input}
+        placeholder="Şifre Tekrar"
+        secureTextEntry
+        value={confirmPassword}
+        onChangeText={handleConfirmPasswordChange}
+      />
+      {!passwordsMatch && (
+        <Text style={styles.errorText}>Şifreler uyuşmuyor!</Text>
+      )}
       <TouchableOpacity style={styles.touchableButton} onPress={handleSignup}>
         <Text style={styles.touchableButtonText}>Üye Ol</Text>
       </TouchableOpacity>
@@ -102,6 +180,25 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
     backgroundColor: '#fff',
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
+  },
+  datePickerButton: {
+    width: '100%',
+    padding: 10,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  datePickerText: {
+    fontSize: 16,
+    color: '#555',
   },
   touchableButton: {
     backgroundColor: '#841584',

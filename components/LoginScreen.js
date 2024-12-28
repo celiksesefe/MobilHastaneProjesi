@@ -66,7 +66,7 @@ const LoginScreen = ({ navigation }) => {
         value={password}
         onChangeText={setPassword}
       />
-      <TouchableOpacity style={[styles.touchableButton, { backgroundColor: "#2196F3" }]} onPress={handleLogin}>
+      <TouchableOpacity style={[styles.touchableButton, { backgroundColor: '#2196F3' }]} onPress={handleLogin}>
         <Text style={styles.touchableButtonText}>Giriş Yap</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -77,7 +77,7 @@ const LoginScreen = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.forgotButton}
-        onPress={() => Alert.alert('Şifremi Unuttum', 'Şifrenizi sıfırlamak için destek ekibiyle iletişime geçin.')}
+        onPress={() => navigation.navigate('ForgotPassword')} // Şifremi Unuttum ekranına yönlendir
       >
         <Text style={styles.forgotButtonText}>Şifremi Unuttum</Text>
       </TouchableOpacity>
