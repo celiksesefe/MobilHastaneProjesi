@@ -20,7 +20,10 @@ const UserHomeScreen = ({ navigation }) => {
       <TouchableOpacity style={[styles.button, styles.resultsButton]}>
         <Text style={styles.buttonText}>Sonuçları Gör</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.profileButton]}>
+      <TouchableOpacity
+        style={[styles.button, styles.profileButton]}
+        onPress={() => navigation.navigate('EditProfile')} // Profili Yönet ekranına yönlendirme
+      >
         <Text style={styles.buttonText}>Profili Yönet</Text>
       </TouchableOpacity>
       <TouchableOpacity style={[styles.button, styles.logoutButton]} onPress={handleLogout}>

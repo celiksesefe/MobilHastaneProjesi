@@ -6,6 +6,7 @@ import SignupScreen from '../components/SignupScreen';
 import UserHomeScreen from '../components/UserHomeScreen';
 import AdminHomeScreen from '../components/AdminHomeScreen';
 import ForgotPasswordScreen from '../components/ForgotPasswordScreen';
+import EditProfileScreen from '../components/EditProfileScreen'; // Profil düzenleme ekranı
 
 const Stack = createStackNavigator();
 
@@ -15,14 +16,14 @@ export default function AppNavigator({ user, userType }) {
       <Stack.Navigator
         initialRouteName={user ? (userType === 'admin' ? 'AdminHome' : 'UserHome') : 'Welcome'}
         screenOptions={{
-          headerShown: false,
+          headerShown: false, // Üst başlığı gizle
         }}
       >
         {/* Giriş yapmamış kullanıcı için ekranlar */}
         <Stack.Screen
           name="Welcome"
           component={WelcomeScreen}
-          options={{ headerShown: false }} // Giriş yapmamışsa göster
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Login"
@@ -44,12 +45,17 @@ export default function AppNavigator({ user, userType }) {
         <Stack.Screen
           name="UserHome"
           component={UserHomeScreen}
-          options={{ headerShown: user && userType === 'user' }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="AdminHome"
           component={AdminHomeScreen}
-          options={{ headerShown: user && userType === 'admin' }}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfileScreen} // Profil düzenleme ekranı
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
