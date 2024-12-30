@@ -6,9 +6,9 @@ import { signOut } from 'firebase/auth';
 const UserHomeScreen = ({ navigation }) => {
   const handleLogout = async () => {
     try {
-      await signOut(auth); // Firebase Web SDK'ya uygun çıkış işlemi
+      await signOut(auth);
       Alert.alert('Başarılı', 'Çıkış yapıldı!');
-      navigation.replace('Welcome'); // Çıkış sonrası giriş ekranına yönlendirme
+      navigation.replace('Welcome'); // Kullanıcıyı giriş ekranına yönlendir
     } catch (error) {
       Alert.alert('Hata', error.message);
     }
@@ -17,16 +17,22 @@ const UserHomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Hoş Geldiniz, Kullanıcı!</Text>
-      <TouchableOpacity style={[styles.button, styles.resultsButton]}>
+      <TouchableOpacity
+        style={[styles.button, styles.resultsButton]}
+        onPress={() => navigation.navigate('ViewOwnResults')} // Kullanıcının kendi sonuçlarını görme ekranına yönlendirme
+      >
         <Text style={styles.buttonText}>Sonuçları Gör</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.button, styles.profileButton]}
-        onPress={() => navigation.navigate('EditProfile')} // Profili Yönet ekranına yönlendirme
+        onPress={() => navigation.navigate('EditProfile')} // Kullanıcının profilini düzenleme ekranına yönlendirme
       >
         <Text style={styles.buttonText}>Profili Yönet</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.logoutButton]} onPress={handleLogout}>
+      <TouchableOpacity
+        style={[styles.button, styles.logoutButton]}
+        onPress={handleLogout}
+      >
         <Text style={styles.buttonText}>Çıkış Yap</Text>
       </TouchableOpacity>
     </View>

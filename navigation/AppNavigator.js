@@ -6,7 +6,10 @@ import SignupScreen from '../components/SignupScreen';
 import UserHomeScreen from '../components/UserHomeScreen';
 import AdminHomeScreen from '../components/AdminHomeScreen';
 import ForgotPasswordScreen from '../components/ForgotPasswordScreen';
-import EditProfileScreen from '../components/EditProfileScreen'; // Profil düzenleme ekranı
+import AddPatientDataScreen from '../components/AddPatientDataScreen';
+import ViewPatientDataScreen from '../components/ViewPatientDataScreen';
+import EditProfileScreen from '../components/EditProfileScreen';
+import ViewOwnDataScreen from '../components/ViewOwnDataScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,7 +17,7 @@ export default function AppNavigator({ user, userType }) {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={user ? (userType === 'admin' ? 'AdminHome' : 'UserHome') : 'Welcome'}
+        initialRouteName="Welcome"
         screenOptions={{
           headerShown: false, // Üst başlığı gizle
         }}
@@ -41,7 +44,7 @@ export default function AppNavigator({ user, userType }) {
           options={{ headerShown: false }}
         />
 
-        {/* Giriş yapmış kullanıcı için ekranlar */}
+        {/* Kullanıcı ve Admin için ekranlar */}
         <Stack.Screen
           name="UserHome"
           component={UserHomeScreen}
@@ -53,8 +56,23 @@ export default function AppNavigator({ user, userType }) {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="AddPatientData"
+          component={AddPatientDataScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ViewPatientData"
+          component={ViewPatientDataScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="EditProfile"
-          component={EditProfileScreen} // Profil düzenleme ekranı
+          component={EditProfileScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ViewOwnResults"
+          component={ViewOwnDataScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

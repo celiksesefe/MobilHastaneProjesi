@@ -1,7 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, initializeAuth, getReactNativePersistence } from "firebase/auth";
+import { getDatabase } from "firebase/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+// Firebase yapılandırması
 const firebaseConfig = {
   apiKey: "AIzaSyAvdlyXv1L9Mkb18ij3cNngzX_EA2aPmws",
   authDomain: "mobiluygulamaprojesi-dd70a.firebaseapp.com",
@@ -16,7 +18,13 @@ const firebaseConfig = {
 // Firebase uygulamasını başlat
 const app = initializeApp(firebaseConfig);
 
-// Authentication modülünü dışa aktar
-const auth = getAuth(app);
+// Authentication modülünü AsyncStorage ile başlat
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage),
+});
 
-export { auth };
+// Realtime Database modülünü başlat
+const database = getDatabase(app);
+
+// Authentication ve Database'i dışa aktar
+export { auth, database };

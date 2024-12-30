@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { auth } from '../config/firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { getDatabase, ref, set } from 'firebase/database';
@@ -94,67 +103,67 @@ const SignupScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Üye Ol</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Ad Soyad"
-        value={fullName}
-        onChangeText={setFullName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="T.C. Kimlik Numarası"
-        keyboardType="numeric"
-        value={tcNo}
-        onChangeText={setTcNo}
-      />
-      <TouchableOpacity style={styles.datePickerButton} onPress={showDatePicker}>
-        <Text style={styles.datePickerText}>
-          {birthDate ? `Doğum Tarihi: ${birthDate}` : 'Doğum Tarihi Seç'}
-        </Text>
-      </TouchableOpacity>
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-        maximumDate={new Date()}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="E-posta"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Şifre"
-        secureTextEntry
-        value={password}
-        onChangeText={handlePasswordChange}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Şifre Tekrar"
-        secureTextEntry
-        value={confirmPassword}
-        onChangeText={handleConfirmPasswordChange}
-      />
-      {!passwordsMatch && (
-        <Text style={styles.errorText}>Şifreler uyuşmuyor!</Text>
-      )}
-      <TouchableOpacity style={styles.touchableButton} onPress={handleSignup}>
-        <Text style={styles.touchableButtonText}>Üye Ol</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.touchableButton}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={styles.touchableButtonText}>Geri Dön</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Üye Ol</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ad Soyad"
+          value={fullName}
+          onChangeText={setFullName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="T.C. Kimlik Numarası"
+          keyboardType="numeric"
+          value={tcNo}
+          onChangeText={setTcNo}
+        />
+        <TouchableOpacity style={styles.datePickerButton} onPress={showDatePicker}>
+          <Text style={styles.datePickerText}>
+            {birthDate ? `Doğum Tarihi: ${birthDate}` : 'Doğum Tarihi Seç'}
+          </Text>
+        </TouchableOpacity>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+          maximumDate={new Date()}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="E-posta"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Şifre"
+          secureTextEntry
+          value={password}
+          onChangeText={handlePasswordChange}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Şifre Tekrar"
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={handleConfirmPasswordChange}
+        />
+        {!passwordsMatch && <Text style={styles.errorText}>Şifreler uyuşmuyor!</Text>}
+        <TouchableOpacity style={styles.touchableButton} onPress={handleSignup}>
+          <Text style={styles.touchableButtonText}>Üye Ol</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.touchableButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.touchableButtonText}>Geri Dön</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

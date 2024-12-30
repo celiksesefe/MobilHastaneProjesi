@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { auth } from '../config/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { getDatabase, ref, get } from 'firebase/database';
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState(''); // E-posta
-  const [password, setPassword] = useState(''); // Şifre
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
     try {
-      // Firebase Authentication ile giriş yap
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Kullanıcının türünü Firebase Realtime Database'den al
       const db = getDatabase();
       const userRef = ref(db, `users/${user.uid}`);
       const snapshot = await get(userRef);
@@ -23,9 +30,9 @@ const LoginScreen = ({ navigation }) => {
         const userType = snapshot.val().userType;
 
         if (userType === 'admin') {
-          navigation.replace('AdminHome'); // Admin ekranına yönlendir
+          navigation.replace('AdminHome');
         } else {
-          navigation.replace('UserHome'); // Kullanıcı ekranına yönlendir
+          navigation.replace('UserHome');
         }
       } else {
         Alert.alert('Hata', 'Kullanıcı bilgisi veritabanında bulunamadı.');
@@ -50,45 +57,47 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Giriş Yap</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="E-posta"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Şifre"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TouchableOpacity style={[styles.touchableButton, { backgroundColor: '#2196F3' }]} onPress={handleLogin}>
-        <Text style={styles.touchableButtonText}>Giriş Yap</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.touchableButton}
-        onPress={() => navigation.navigate('Welcome')}
-      >
-        <Text style={styles.touchableButtonText}>Geri Dön</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.forgotButton}
-        onPress={() => navigation.navigate('ForgotPassword')} // Şifremi Unuttum ekranına yönlendir
-      >
-        <Text style={styles.forgotButtonText}>Şifremi Unuttum</Text>
-      </TouchableOpacity>
-      <Text style={styles.infoText}>Üyeliğiniz yok ise:</Text>
-      <TouchableOpacity
-        style={styles.signupButton}
-        onPress={() => navigation.navigate('Signup')}
-      >
-        <Text style={styles.signupButtonText}>Üye Ol</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Giriş Yap</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="E-posta"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Şifre"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TouchableOpacity style={[styles.touchableButton, { backgroundColor: '#2196F3' }]} onPress={handleLogin}>
+          <Text style={styles.touchableButtonText}>Giriş Yap</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.touchableButton}
+          onPress={() => navigation.navigate('Welcome')}
+        >
+          <Text style={styles.touchableButtonText}>Geri Dön</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.forgotButton}
+          onPress={() => navigation.navigate('ForgotPassword')}
+        >
+          <Text style={styles.forgotButtonText}>Şifremi Unuttum</Text>
+        </TouchableOpacity>
+        <Text style={styles.infoText}>Üyeliğiniz yok ise:</Text>
+        <TouchableOpacity
+          style={styles.signupButton}
+          onPress={() => navigation.navigate('Signup')}
+        >
+          <Text style={styles.signupButtonText}>Üye Ol</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

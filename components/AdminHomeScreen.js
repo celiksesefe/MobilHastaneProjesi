@@ -17,13 +17,22 @@ const AdminHomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Hoş Geldin, Doktor!</Text>
-      <TouchableOpacity style={[styles.button, styles.addPatientButton]}>
-        <Text style={styles.buttonText}>Hasta Ekle</Text>
+      <TouchableOpacity
+        style={[styles.button, styles.addPatientButton]}
+        onPress={() => navigation.navigate('AddPatientData')}
+      >
+        <Text style={styles.buttonText}>Hasta Veri Ekle</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.seePatientButton]}>
+      <TouchableOpacity
+        style={[styles.button, styles.seePatientButton]}
+        onPress={() => navigation.navigate('ViewPatientData')}
+      >
         <Text style={styles.buttonText}>Hasta Takibi</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.logoutButton]} onPress={handleLogout}>
+      <TouchableOpacity
+        style={[styles.button, styles.logoutButton]}
+        onPress={handleLogout}
+      >
         <Text style={styles.buttonText}>Çıkış Yap</Text>
       </TouchableOpacity>
     </View>
