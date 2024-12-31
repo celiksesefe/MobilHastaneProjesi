@@ -10,6 +10,7 @@ import AddPatientDataScreen from '../components/AddPatientDataScreen';
 import ViewPatientDataScreen from '../components/ViewPatientDataScreen';
 import EditProfileScreen from '../components/EditProfileScreen';
 import ViewOwnDataScreen from '../components/ViewOwnDataScreen';
+import CompareResultsScreen from '../components/CompareResultsScreen'; // Yeni ekranı içe aktar
 
 const Stack = createStackNavigator();
 
@@ -73,6 +74,11 @@ export default function AppNavigator({ user, userType }) {
         <Stack.Screen
           name="ViewOwnResults"
           component={ViewOwnDataScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CompareResultsScreen" 
+          component={CompareResultsScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
